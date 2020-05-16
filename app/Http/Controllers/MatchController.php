@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewMatch;
 use App\Http\Resources\MatchResource;
 use App\Models\Match;
 use App\Models\Team;
@@ -31,7 +32,7 @@ class MatchController extends Controller
             $match->teams()->attach($request->home_id,['position'=>'home']);
             $match->teams()->attach($request->away_id,['position'=>'away']);
 
-
+            broadcast(new NewMatch($match))->toOthers();
         } catch (\Exception $exception){
             return response()->json(['error' => $exception->getMessage()]);
         }

@@ -25,15 +25,9 @@ class FansController extends Controller
             ];
             $league[] = $temp;
         }
-        // TODO: ANOTHER SORTING ALGORITHM
-        usort($league,$this->build_sorter('league_points'));
-        return response()->json($league);
-    }
 
-    function build_sorter($key) {
-        return function ($a, $b) use ($key) {
-            return strnatcmp($b[$key],$a[$key]);
-        };
+        usort($league,$this->leagueSorter('league_points','difference'));
+        return response()->json($league);
     }
 
     public function results(){
@@ -60,5 +54,20 @@ class FansController extends Controller
         }
 
         return response()->json($result);
+    }
+
+
+    // HELPERS
+    function leagueSorter($key1, $key2){
+        return function ($a, $b) use ($key1,$key2){
+            if($b[$key1] == $a[$key1])
+                return $this->compare($b[$key2],$a[$key2]);
+            return $this->compare($b[$key1],$a[$key1]);
+        };
+    }
+
+    function compare($a,$b){
+        if($a == $b) return 0;
+        return $a<$b ? -1 : 1;
     }
 }
