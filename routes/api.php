@@ -32,7 +32,7 @@ Route::get('matches/{id}','MatchController@show');
 
 
 // Admin Endpoints
-//Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('/user',function (){
         return response()->json(Auth::user());
@@ -51,7 +51,7 @@ Route::get('matches/{id}','MatchController@show');
     Route::post('matches','MatchController@store');
     Route::put('matches/{id}','MatchController@update');
     Route::delete('matches/{id}','MatchController@destroy');
-//});
+});
 
 
 
